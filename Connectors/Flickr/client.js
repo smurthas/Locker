@@ -10,7 +10,7 @@
 var extras = 'description,license,date_upload,date_taken,owner_name,icon_server,' +
              'original_format,last_update,geo,tags,machine_tags,o_dims' +
              'views,media,path_alias,url_sq,url_t,url_s,url_m,url_z,url_l,url_o';
-             
+
 
 var debug = true;
 
@@ -18,7 +18,7 @@ var base_url = 'http://api.flickr.com/services/rest/';
 
 var crypto = require('crypto'),
     fs = require('fs'),
-    sys = require('sys'),
+    util = require('util'),
     request = require('request'),
     connect = require('connect'),
     express = require('express'),
@@ -51,7 +51,7 @@ function getAuthSignedURL(perms) {
 
 function getSignedMethodURL(method, params) {
     var params2 = [];
-    for(i in params) 
+    for(i in params)
         params2.push(params[i]);
     params2.push('method=' + method);
     params2.push('format=json');
@@ -68,8 +68,8 @@ function getTokenFromFrob(frob) {
     var url = getSignedMethodURL('flickr.auth.getToken', ['frob=' + frob]);
     request.get({uri:url}, function(err, resp, body) {
         if(err)
-            sys.puts('Network Error: ' + sys.inspect(err));
-        else {    
+            util.puts('Network Error: ' + util.inspect(err));
+        else {
             var json = JSON.parse(body);
             for(var i in json.auth)
                 auth[i] = json.auth[i];
@@ -106,7 +106,7 @@ function getPhotoURL(photoObject) {
 function constructPhotoURL(photoObject, size) {
     if(!size)
         size = 't';
-    return 'http://farm' + photoObject.farm + '.static.flickr.com/' + photoObject.server + '/' 
+    return 'http://farm' + photoObject.farm + '.static.flickr.com/' + photoObject.server + '/'
                     + photoObject.id + '_' + photoObject.secret + '_' + size + '.jpg';
 }
 
@@ -117,8 +117,8 @@ function(req, res) {
         'Content-Type': 'text/html'
     });
     if(!(auth.apiKey && auth.apiSecret)) {
-        res.end("<html>Enter your personal Flickr app info that will be used to sync your data" + 
-                " (create a new one <a href='http://www.flickr.com/services/apps/create/apply/' target='_blank'>" + 
+        res.end("<html>Enter your personal Flickr app info that will be used to sync your data" +
+                " (create a new one <a href='http://www.flickr.com/services/apps/create/apply/' target='_blank'>" +
                 "here</a> using the callback url of " +
                 externalUrl+"auth) " +
                 "<form method='get' action='save'>" +
@@ -178,11 +178,11 @@ function(req, res) {
         'Content-Type': 'text/html'
     });
     var url = getSignedMethodURL('flickr.contacts.getList',['auth_token=' + auth.token._content]);
-    
+
     try {
         request.get({uri:url}, function(err, resp, body) {
             if(err)
-                sys.puts('Network Error: ' + sys.inspect(err));
+                util.puts('Network Error: ' + util.inspect(err));
             else {
                 var json = JSON.parse(body);
                 lfs.writeObjectsToFile('contacts.json', json.contacts.contact);
@@ -211,7 +211,7 @@ function getPhotos(auth_token, username, user_id, page, oldest, newest) {
     try {
         request.get({uri:url}, function(err, resp, body) {
             if(err)
-                sys.puts('Network Error: ' + sys.inspect(err));
+                util.puts('Network Error: ' + util.inspect(err));
             else {
                 var json = JSON.parse(body);
                 if(!json || !json.photos || !json.photos.photo) {
@@ -229,29 +229,29 @@ function getPhotos(auth_token, username, user_id, page, oldest, newest) {
                     var id = photo.id;
                     lfs.saveUrl(getPhotoThumbURL(photo), 'thumbs/' + id + '.jpg', function(err) {
                         if(err)
-                            sys.debug(err)
+                            util.debug(err)
                         lfs.saveUrl(getPhotoURL(photo), 'originals/' + id + '.jpg', function(err) {
                             if(err)
-                                sys.debug(err)
+                                util.debug(err)
                             log('got flickr photo ' + id);
                             locker.event('photo/flickr', {"_id":id})
                             curl(photos, callback);
                         });
                     });
                 }
-        
-                curl(photos, function() {   
+
+                curl(photos, function() {
                     if((json.photos.pages - json.photos.page) > 0)
                         getPhotos(auth_token, username, user_id, page + 1, oldest, newest);
                     });
                 }
             });
     } catch(err) { console.error(err); }
-    
+
 }
 
 //download photos
-app.get('/photos', 
+app.get('/photos',
 function(req, res) {
     if(!auth || !auth.token || !auth.token._content) {
         res.redirect('/');
@@ -284,11 +284,11 @@ app.get('/photoObject/*', function(req, res) {
     //TODO: this is reeealy bad! Some sort of DB probably makes way more sense
     lfs.readObjectsFromFile('photos.json', function(photos) {
         var photoNum = req.url.substring(13);
-        sys.debug(photoNum);
+        util.debug(photoNum);
         var index = photoNum.indexOf('/');
-        if(index >= 0)   
+        if(index >= 0)
             photoNum = photoNum.substring(0, index);
-        sys.debug(photoNum);
+        util.debug(photoNum);
         for(var i in photos) {
             if(photos[i].id == photoNum) {
                 res.writeHead(200);
@@ -304,7 +304,7 @@ app.get('/photoObject/*', function(req, res) {
 app.get('/photo/*', function(req, res) {
     var photoNum = req.url.substring(7);
     var index = photoNum.indexOf('/');
-    if(index >= 0)   
+    if(index >= 0)
         photoNum = photoNum.substring(0, index);
     var stream = fs.createReadStream('originals/' + photoNum + '.jpg');
     var head = false;
@@ -325,7 +325,7 @@ app.get('/photo/*', function(req, res) {
 });
 
 function log(msg) {
-    if(debug) sys.debug(msg);
+    if(debug) util.debug(msg);
 }
 
 var stdin = process.openStdin();

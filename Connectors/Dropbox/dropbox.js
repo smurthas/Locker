@@ -16,7 +16,6 @@ var fs = require('fs'),
     express = require('express'),
     connect = require('connect'),
     request = require('request'),
-    sys = require('sys'),
     dbox = require('dropbox').DropboxClient,
     app = express.createServer(
                     connect.bodyParser(),
@@ -57,7 +56,7 @@ app.get('/init', function(req, res) {
         }
         fs.writeFileSync('auth.json', JSON.stringify({key:req.param('key'), ksecret:req.param('secret'), token:token, tsecret:secret}));
         res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end("saved access token "+token+", <a href='./'>continue</a>");        
+        res.end("saved access token "+token+", <a href='./'>continue</a>");
     });
 });
 

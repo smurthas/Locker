@@ -11,10 +11,9 @@ var vows = require("vows");
 var assert = require("assert");
 var fs = require("fs");
 var events = require("events");
-require.paths.push(__dirname + "/../Common/node");
-var lcrypto = require("lcrypto");
+var lcrypto = require(__dirname + "/../Common/node/lcrypto");
 var request = require("request");
-var lconfig = require("lconfig");
+var lconfig = require(__dirname + "/../Common/node/lconfig");
 var querystring = require("querystring");
 lconfig.load("Config/config.json");
 

@@ -10,7 +10,7 @@
 /**
  * web server/service to wrap interactions w/ GitHub API
  */
- 
+
 // http://twitpic.com/show/full/:id
 
 var fs = require('fs'),
@@ -18,7 +18,6 @@ var fs = require('fs'),
     express = require('express'),
     connect = require('connect'),
     request = require('request'),
-    sys = require('sys'),
     app = express.createServer(
                     connect.bodyParser(),
                     connect.cookieParser()),
@@ -55,7 +54,7 @@ app.get('/init', function(req, res) {
     fs.writeFileSync('auth.json', JSON.stringify({handle:handle}));
     fs.mkdir("thumbs-"+handle,0755,function(err){
         res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end("saved "+handle+", <a href='./'>continue</a>");        
+        res.end("saved "+handle+", <a href='./'>continue</a>");
     });
 });
 
@@ -112,28 +111,28 @@ app.get('/full/:pic', function(req, res) {
         }
         var tails = parts[1].split('"');
         res.redirect('http://s3.amazonaws.com/twitpic/photos/full/'+tails[0]);
-    });    
+    });
 });
 
 
 /*
-    <ul id="user-photos"> 
-    				    	    	<li> 
-    		<div class="user-photo"> 
+    <ul id="user-photos">
+    				    	    	<li>
+    		<div class="user-photo">
     			<a href="/3slai"><img alt="Here I am planting the millionth tree. What action are you creating today?
-" src="http://s3.amazonaws.com/twitpic/photos/thumb/6372810.jpg?AWSAccessKeyId=AKIAJF3XCCKACR3QDMOA&Expires=1306906024&Signature=zoWvIfL1IsD8Ppbj6xSszWcrXwo%3D" style="width: 150px; height: 150px;" /></a> 
-    			
-    			    		</div> 
-    		<div class="user-tweet"> 
+" src="http://s3.amazonaws.com/twitpic/photos/thumb/6372810.jpg?AWSAccessKeyId=AKIAJF3XCCKACR3QDMOA&Expires=1306906024&Signature=zoWvIfL1IsD8Ppbj6xSszWcrXwo%3D" style="width: 150px; height: 150px;" /></a>
+
+    			    		</div>
+    		<div class="user-tweet">
     			<p>Here I am planting the millionth tree. What action are you creating today?<br />
-</p> 
-    			<p class="tweet-meta"> 
+</p>
+    			<p class="tweet-meta">
     				769 days ago from site &bull; viewed 7125 times
-    			</p> 
-    			
-    			    		</div> 
-    	</li> 
-    				    	    	<li> 
+    			</p>
+
+    			    		</div>
+    	</li>
+    				    	    	<li>
     		<div class="user-photo">
 */
 

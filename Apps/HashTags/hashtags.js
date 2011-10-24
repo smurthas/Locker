@@ -11,7 +11,6 @@ var url = require('url');
 var express = require('express');
 var connect = require('connect');
 var request = require('request');
-var sys = require('sys');
 var fs = require("fs");
 var path = require("path");
 var querystring = require("querystring");
@@ -34,7 +33,7 @@ app.get("/tagCounts", function(req, res) {
             res.end("No twitter providers");
             return;
         }
-        
+
         var fetchURL = providers[0].uri + "getCurrent/home_timeline";
         request.get({url:fetchURL}, function(error, request, result) {
             if (error || !result) {

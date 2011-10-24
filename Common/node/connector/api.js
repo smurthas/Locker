@@ -8,7 +8,7 @@
 */
 
 var fs = require('fs'),
-    lfs = require("lfs"),
+    lfs = require(__dirname + "/lfs"),
     dataStore = require('connector/dataStore'),
     validTypes = [];
 
@@ -48,7 +48,7 @@ app.get('/getCurrent/:type', function(req, res) {
 app.get('/get_profile', function(req, res) {
     lfs.readObjectFromFile('profile.json', function(userInfo) {
         res.writeHead(200, {"Content-Type":"application/json"});
-        res.end(JSON.stringify(userInfo));        
+        res.end(JSON.stringify(userInfo));
     });
 });
 

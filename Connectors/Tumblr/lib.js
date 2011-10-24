@@ -11,10 +11,9 @@ var fs = require('fs'),
     request = require('request'),
     async = require('async'),
     url = require('url'),
-    crypto = require("crypto"),
-    sys = require('sys');
+    crypto = require("crypto");
 
-    
+
 var tumblr;
 var auth;
 var base = 'http://api.tumblr.com/v2';

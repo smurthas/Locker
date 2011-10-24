@@ -11,7 +11,6 @@ var url = require('url')
 var express = require('express');
 var connect = require('connect');
 var request = require('request');
-var sys = require('sys');
 var sqlite = require("sqlite");
 
 var app = express.createServer(connect.bodyParser(), connect.cookieParser())
@@ -61,7 +60,7 @@ app.post("/post", function(req, res) {
 });
 
 /**
-Get an array of journal entries.  
+Get an array of journal entries.
 
 Arguments:
     start - A start date to retrieve entries from, defaults to 0, UNIX epoch.

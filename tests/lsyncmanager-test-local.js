@@ -11,10 +11,9 @@
 * Tests the acutal implementation of the lsyncmanager.
 */
 
-require.paths.push(__dirname + "/../Common/node");
 var vows = require("vows")
   , assert = require("assert")
-  , lconfig = require("lconfig")
+  , lconfig = require(__dirname + "/../Common/node/lconfig")
   , fs = require('fs')
   , mongo
   , allEvents = {}
@@ -26,7 +25,7 @@ var vows = require("vows")
   , colls
   ;
 lconfig.load("Config/config.json");
-var levents = require("levents");
+var levents = require(__dirname + "/../Common/node/levents");
 var realFireEvent = levents.fireEvent;
 levents.fireEvent = function(type, id, action, obj) {
     if (type == primaryType || type == otherType) {
@@ -35,7 +34,7 @@ levents.fireEvent = function(type, id, action, obj) {
     }
 }
 
-var syncManager = require("lsyncmanager.js");
+var syncManager = require(__dirname + "/../Common/node/lsyncmanager.js");
 var lmongo = require('../Common/node/lmongo');
 var start;
 /*

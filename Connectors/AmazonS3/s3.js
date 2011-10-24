@@ -16,7 +16,6 @@ var fs = require('fs'),
     express = require('express'),
     connect = require('connect'),
     request = require('request'),
-    sys = require('sys'),
     path = require('path'),
     knox = require('knox'),
     app = express.createServer(
@@ -51,7 +50,7 @@ app.get('/init', function(req, res) {
     s3 = knox.createClient({key:req.param('key'), secret:req.param('secret'), bucket:req.param('bucket')});
     fs.writeFileSync('auth.json', JSON.stringify({key:req.param('key'), secret:req.param('secret'), bucket:req.param('bucket')}));
     res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end("saved, <a href='./'>continue</a>");        
+    res.end("saved, <a href='./'>continue</a>");
 });
 
 app.get('/save', function(req, res) {

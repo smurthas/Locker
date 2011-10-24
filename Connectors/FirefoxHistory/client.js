@@ -8,7 +8,6 @@
 */
 
 var fs      = require('fs'),
-    sys     = require('sys'),
     sqlite  = require('sqlite'),
     express = require('express'),
     connect = require('connect'),
@@ -25,7 +24,7 @@ var app = express.createServer(
 
 app.get('/', function(req, res) {
     res.end("<html>we'll be chugging away...</html>");
-    
+
     // TODO: Check for existing JSON dump and update if exists
     fs.mkdir('my', 0755);
 
@@ -68,7 +67,7 @@ app.get('/allLinks', function(req, res) {
 
 function copyAndExtract(accountID, fullPath) {
     var copy = spawn('cp', [fullPath + '/places.sqlite', 'places.sqlite']);
-    
+
     copy.stderr.on('data', function(data) {
         console.log('Error while copying: ' + data);
     });
@@ -83,7 +82,7 @@ function copyAndExtract(accountID, fullPath) {
                 console.log("Tonight. You.");
                 throw error;
             }
-            
+
             var sql = 'SELECT * FROM moz_places';
             db.prepare(sql, function (error, statement) {
                 if (error) throw error;
@@ -92,7 +91,7 @@ function copyAndExtract(accountID, fullPath) {
                         stream.write(JSON.stringify(rows[i]) + '\n');
                     }
                     stream.end();
-                 
+
                     statement.finalize(function (error) {
                         console.log("All done!");
                     });

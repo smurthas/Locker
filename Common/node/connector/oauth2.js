@@ -10,13 +10,13 @@
 var request = require('request'),
     lfs = require('lfs'),
     fs = require('fs'),
-    sys = require('sys'),
+    util = require('util'),
     querystring = require('querystring'),
     options = {provider :            'Some oauth2 consumer',
                endPoint :            'http://consumer.com/oauth/',
                linkToCreate :        'http://change.me/',
                appIDName :           'App ID',
-               authEndpoint :        'authorize', 
+               authEndpoint :        'authorize',
                appSecretName :       'App Secret',
                promptForUsername :   false,
                accessTokenResponse : 'text',
@@ -49,7 +49,7 @@ exports.isAuthed = function() {
     try {
         if(!exports.auth)
             exports.auth = {};
-        
+
         // Already have the stuff read
         if(exports.auth.hasOwnProperty("accessToken"))
             return true;
@@ -78,10 +78,10 @@ function go(req, res) {
         if (req.param('error')) {
             error = '<h1>Got an error while attempting to authenticate : ' + error + "</h1><p>Please reenter your credentials below.</p>";
         }
-        res.end("<html>" + error + "Enter your personal " + options.provider + " app info that will be used to sync your data" + 
+        res.end("<html>" + error + "Enter your personal " + options.provider + " app info that will be used to sync your data" +
                 " (create a new one <a href='" + options.linkToCreate + "' target='_blank'>here</a>" +
                 " using a callback url of " + options.redirectURI + "auth/) " +
-                "<form method='post' action='saveAuth'>" + 
+                "<form method='post' action='saveAuth'>" +
                     prompt +
                     options.appIDName + ": <input name='appKey'><br>" +
                     options.appSecretName + ": <input name='appSecret'><br>" +
@@ -90,9 +90,9 @@ function go(req, res) {
     } else if (exports.isAuthed()) {
         res.redirect(options.redirectURI);
     } else {
-        var newUrl = options.endPoint + "/" + options.authEndpoint + '?client_id=' + exports.auth.appKey + 
+        var newUrl = options.endPoint + "/" + options.authEndpoint + '?client_id=' + exports.auth.appKey +
                         '&response_type=code&redirect_uri=' + options.redirectURI + 'auth/';
-        sys.debug('redirecting to ' + newUrl);
+        util.debug('redirecting to ' + newUrl);
         if (options.extraParams) {
             newUrl += "&" + options.extraParams;
         }

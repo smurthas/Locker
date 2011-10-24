@@ -1,10 +1,10 @@
 var fs = require('fs')
   , path = require('path')
-  , lconfig = require("lconfig")
+  , lconfig = require(__dirname + "/lconfig")
   , spawn = require('child_process').spawn
   , datastore
   , async = require('async')
-  , lutil = require('lutil')
+  , lutil = require(__dirname + '/lutil')
   , EventEmitter = require('events').EventEmitter
   , levents = require(__dirname + '/levents')
   ;

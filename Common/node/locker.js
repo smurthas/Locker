@@ -9,9 +9,9 @@
 
 var request = require('request'),
     fs = require("fs"),
-    sys = require('sys'),
     http = require("http"),
     url = require("url"),
+    util = require('util'),
     lstate = require("lstate"),
     querystring = require("querystring");
 
@@ -102,7 +102,7 @@ exports.event = function(type, obj, action) {
 exports.listen = function(type, callbackEndpoint, callbackFunction) {
     request.get({url:baseServiceUrl + '/listen?' + querystring.stringify({'type':type, 'cb':callbackEndpoint})},
     function(error, response, body) {
-        if(error) sys.debug(error);
+        if(error) util.debug(error);
         if(callbackFunction) callbackFunction(error);
     });
 };
@@ -110,7 +110,7 @@ exports.listen = function(type, callbackEndpoint, callbackFunction) {
 exports.deafen = function(type, callbackEndpoint, callbackFunction) {
     request.get({url:baseServiceUrl + '/deafen?' + querystring.stringify({'type':type, 'cb':callbackEndpoint})},
     function(error, response, body) {
-        if(error) sys.debug(error);
+        if(error) util.debug(error);
         if(callbackFunction) callbackFunction(error);
     });
 };

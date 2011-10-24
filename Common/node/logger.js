@@ -6,7 +6,7 @@
 * Please see the LICENSE file for more information.
 *
 */
-var lconfig = require("lconfig");
+var lconfig = require(__dirname + "/lconfig");
 var winston = require("winston");
 var events = require("events");
 var util = require("util");

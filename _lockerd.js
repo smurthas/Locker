@@ -25,34 +25,33 @@ exports.alive = false;
 // var npm = require('npm');
 //npm.load(conf, function(er) {
   //npm.commands.install([], function(err, data) {
-    require.paths.push(__dirname + "/Common/node");
     var spawn = require('child_process').spawn;
     var fs = require('fs');
     var path = require('path');
     var request = require('request');
     var async = require('async');
     var util = require('util');
-    var lutil = require('lutil');
+    var lutil = require(__dirname + '/Common/node/lutil');
     require('graceful-fs');
 
 
     // This lconfig stuff has to come before and other locker modules are loaded!!
-    var lconfig = require('lconfig');
+    var lconfig = require(__dirname + '/Common/node/lconfig');
     lconfig.load((process.argv[2] == '--config'? process.argv[3] : 'Config/config.json'));
 
     console.log(process.pid);
     fs.writeFileSync(__dirname + '/Logs/locker.pid', "" + process.pid);
 
-    var logger = require("logger");
-    var lconsole = require("lconsole");
-    var lscheduler = require("lscheduler");
-    var syncManager = require('lsyncmanager');
-    var serviceManager = require("lservicemanager");
+    var logger = require(__dirname + "/Common/node/logger");
+    var lconsole = require(__dirname + "/Common/node/lconsole");
+    var lscheduler = require(__dirname + "/Common/node/lscheduler");
+    var syncManager = require(__dirname + "/Common/node/lsyncmanager");
+    var serviceManager = require(__dirname + "/Common/node/lservicemanager");
     var mongodb = require('mongodb');
     var webservice = require(__dirname + "/Ops/webservice.js");
-    var lcrypto = require("lcrypto");
+    var lcrypto = require(__dirname + "/Common/node/lcrypto");
     var thservice = require(__dirname + "/Ops/thservice.js");
-    var lmongo = require('lmongo');
+    var lmongo = require(__dirname + "/Common/node/lmongo");
 
     if(process.argv.indexOf("offline") >= 0) syncManager.synclets().executeable = false;
 

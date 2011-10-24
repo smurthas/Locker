@@ -11,12 +11,11 @@ var fs = require('fs'),
     lfs = require('lfs'),
     request = require('request'),
     async = require('async'),
-    sys = require('sys'),
     dataStore = require('../../Common/node/connector/dataStore'),
     app = require('../../Common/node/connector/api');
     EventEmitter = require('events').EventEmitter;
 
-    
+
 var updateState, auth, allKnownIDs;
 
 exports.eventEmitter = new EventEmitter();
@@ -25,12 +24,12 @@ exports.init = function(theAuth, mongo) {
     auth = theAuth;
     try {
         updateState = JSON.parse(fs.readFileSync('updateState.json'));
-    } catch (updateErr) { 
+    } catch (updateErr) {
         updateState = {home:{syncedThrough:0}, feed:{syncedThrough:0}};
     }
     try {
         allKnownIDs = JSON.parse(fs.readFileSync('allKnownIDs.json'));
-    } catch (idsError) { 
+    } catch (idsError) {
         allKnownIDs = {};
     }
     dataStore.init('id', mongo);
@@ -55,13 +54,13 @@ exports.syncFriends = function(callback) {
         })
         fs.writeFile('profile.json', JSON.stringify(self));
         var userID = self.id;
-        request.get({uri:'https://graph.facebook.com/me/friends?access_token=' + auth.accessToken + '&date_format=U'}, 
+        request.get({uri:'https://graph.facebook.com/me/friends?access_token=' + auth.accessToken + '&date_format=U'},
         function(err, resp, body) {
             var newIDs = [];
             var knownIDs = allKnownIDs;
             var repeatedIDs = [];
             var removedIDs = [];
-            
+
             var friends = JSON.parse(body).data;
             var queue = [];
             var users = {
@@ -69,7 +68,7 @@ exports.syncFriends = function(callback) {
                 'queue': queue,
                 'token': auth.accessToken
             };
-            
+
             for (var i = 0; i < friends.length; i++) {
                 queue.push(friends[i]);
                 if(!knownIDs[friends[i].id]) {
@@ -78,7 +77,7 @@ exports.syncFriends = function(callback) {
                     repeatedIDs[friends[i].id] = 1;
                 }
             }
-            
+
             for(var knownID in knownIDs) {
                 if(!repeatedIDs[knownID])
                     removedIDs.push(knownID);
@@ -93,21 +92,21 @@ exports.syncFriends = function(callback) {
                     callback(null, 3600, "no friend changes");
                 }
             } else {
-                
+
                for (var j = 0; j < newIDs.length; j++) {
                     allKnownIDs[newIDs[j]] = 1;
                 }
                 fs.writeFile('allKnownIDs.json', JSON.stringify(allKnownIDs));
-                
+
                 if(removedIDs.length > 0) {
                     logRemoved(removedIDs, function(err) {});
                 }
-                
+
                 // Careful. downloadUsers has side-effects on newIDs array b/c it can be called recursively.
                 // This is why we grab the length before the crazy shit starts to happen.
                 var newIDsLength = newIDs.length;
                 downloadUsers(newIDs, auth.accessToken, function(err) {
-                    callback(err, 3600, "sync'd " + newIDsLength + " new friends");    
+                    callback(err, 3600, "sync'd " + newIDsLength + " new friends");
                 });
             }
         });
@@ -137,7 +136,7 @@ function downloadUsers(theUsers, token, callback) {
        idString += users.pop() + ',';
     }
     idString = idString.substring(0, idString.length - 1);
-    request.get({uri:'https://graph.facebook.com/?ids=' + idString + '&access_token=' + token + '&date_format=U'}, 
+    request.get({uri:'https://graph.facebook.com/?ids=' + idString + '&access_token=' + token + '&date_format=U'},
         function(err, resp, data) {
             if (err) {
                 console.error(err);
@@ -146,12 +145,12 @@ function downloadUsers(theUsers, token, callback) {
             var response = JSON.parse(data);
             if(response.hasOwnProperty('error')) {
                allKnownIDs = JSON.parse(fs.readFileSync('allKnownIDs.json'));
-               
+
                var ids = idString.split(',');
                for(var j = 0; j < ids.length; j++) {
                    delete allKnownIDs[ids[j]];
                }
-               
+
                fs.writeFile('allKnownIDs.json', JSON.stringify(allKnownIDs));
                return;
            }
@@ -160,14 +159,14 @@ function downloadUsers(theUsers, token, callback) {
                var eventObj = {source:'friends', type:'new', data:result[property]};
                exports.eventEmitter.emit('contact/facebook', eventObj);
            };
-           
+
            for(var property in result) {
                if (result.hasOwnProperty(property)) {
                    dataStore.addObject('friends', result[property], eventCallback());
                }
-           } 
+           }
        });
-    
+
     if (users.length > 0) {
         downloadUsers(users, token, callback);
     }
@@ -193,7 +192,7 @@ function syncFeed(feed, type, callback) {
             });
         });
     });
-    
+
 }
 
 function addPosts(type, posts, callback) {
@@ -211,7 +210,7 @@ function addPosts(type, posts, callback) {
             addPosts(type, posts, callback);
         });
     }
-    
+
 }
 
 exports.syncProfile = function(callback) {
@@ -232,7 +231,7 @@ function getMe(accessToken, callback) {
 
 // this function accidentially turned out to be really async dense, sorry, blame brendan and ryan
 var photocnt = 0;
-exports.syncPhotos = function(cb) 
+exports.syncPhotos = function(cb)
 {
     var albums = [];
     photocnt = 0;
@@ -244,7 +243,7 @@ exports.syncPhotos = function(cb)
             cb(null, "got "+albums.length+" albums and "+photocnt+" photos");
         })
     })
-} 
+}
 
 // recurse getting all the photos in an album
 function getAlbum(uri, callback) {
@@ -297,7 +296,7 @@ function getPosts(userID, type, token, offset, callback, posts) {
     if(updateState[type] && updateState[type].syncedThrough) {
         latest = updateState[type].syncedThrough;
     }
-    request.get({uri:'https://graph.facebook.com/me/' + type + '?limit=' + postLimit + '&offset=' + offset + 
+    request.get({uri:'https://graph.facebook.com/me/' + type + '?limit=' + postLimit + '&offset=' + offset +
                                                             '&access_token=' + token + '&since=' + latest +
                                                             '&date_format=U'},
     function(err, resp, data) {

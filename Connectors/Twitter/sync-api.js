@@ -11,7 +11,6 @@ var fs = require('fs'),
     url = require('url'),
     lstate = require('lstate'),
     querystring = require('querystring'),
-    sys = require('sys'),
     async = require('async'),
     request = require('request'),
     lfs = require('../../Common/node/lfs.js'),
@@ -25,24 +24,24 @@ module.exports = function(theApp) {
     app = theApp;
     lstate.set("status","waiting for next sync");
     lstate.set("syncing",0);
-    
+
     app.get('/', function (req, res) {
         if(!(auth && auth.consumerKey && auth.consumerSecret && auth.token)) {
             res.redirect(app.externalBase + 'auth');
         } else {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end("<html>great! now you can:<br><h3><a href='sync'>sync it all!</a></h3>or: " +
-                                                 "<li><a href='getNew/home_timeline'>sync new home_timeline entries</a></li>" + 
-                                                 "<li><a href='getNew/user_timeline'>sync new user_timeline entries</a></li>" + 
-                                                 "<li><a href='getNew/mentions'>sync new mentions</a></li>" + 
-                                                 "<li><a href='getNew/friends'>sync new friends</a></li>" + 
+                                                 "<li><a href='getNew/home_timeline'>sync new home_timeline entries</a></li>" +
+                                                 "<li><a href='getNew/user_timeline'>sync new user_timeline entries</a></li>" +
+                                                 "<li><a href='getNew/mentions'>sync new mentions</a></li>" +
+                                                 "<li><a href='getNew/friends'>sync new friends</a></li>" +
                                                  "<li><a href='getNew/followers'>sync new followers</a></li>" +
-                                                 "<li><a href='update/friends'>update existing friends</a></li>" + 
+                                                 "<li><a href='update/friends'>update existing friends</a></li>" +
                                                  "<li><a href='update/followers'>update existing followers</a></li>" +
                                                  "<li><a href='update/profile'>sync your profile</a></li>" +"</html>");
         }
     });
-    
+
     app.get('/state', function(req, res) {
         res.writeHead(200, {'Content-Type': 'application/json'});
         if(!(auth && auth.token))
@@ -51,7 +50,7 @@ module.exports = function(theApp) {
         }else{
             lstate.set("ready",1)
         }
-        res.end(JSON.stringify(lstate.state()));        
+        res.end(JSON.stringify(lstate.state()));
     });
     this.authComplete = authComplete;
     return this;
@@ -116,7 +115,7 @@ function authComplete(theAuth, mongo) {
                 lstate.set("status","done syncing");
                 lstate.down("syncing");
             });
-        
+
     });
 
     // Sync the person's friend data
@@ -128,7 +127,7 @@ function authComplete(theAuth, mongo) {
         if(type === 'friends' || type === 'followers')
             people(type, res);
         else if(type === 'mentions' || type === 'home_timeline' || type === 'user_timeline') {
-            statuses(type, res);                
+            statuses(type, res);
         }
     });
 
@@ -136,7 +135,7 @@ function authComplete(theAuth, mongo) {
     function people(type, res) {
         sync.syncUsersInfo(type, function(err, repeatAfter, diaryEntry) {
             if(err) {
-                
+
             } else {
                 lstate.set("status","done syncing "+type);
                 lstate.down("syncing");
@@ -165,7 +164,7 @@ function authComplete(theAuth, mongo) {
             }
         });
     }
-    
+
     app.get('/update/:type', function(req, res) {
         var type = req.params.type.toLowerCase();
         if(type == 'friends' || type == 'followers') {
@@ -188,7 +187,7 @@ function authComplete(theAuth, mongo) {
             res.end(JSON.stringify(status));
         });
     });
-    
+
     sync.eventEmitter.on('status/twitter', function(eventObj) {
         locker.event('status/twitter', eventObj);
     });

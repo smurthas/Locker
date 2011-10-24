@@ -11,7 +11,6 @@ var url = require('url');
 var express = require('express');
 var connect = require('connect');
 var request = require('request');
-var sys = require('sys');
 var fs = require("fs");
 var path = require("path");
 
@@ -62,7 +61,7 @@ function getJournal(callback) {
                 callback(false);
                 return;
             }
-                             
+
             console.log("giving up");
             callback(false);
         });
@@ -91,8 +90,8 @@ app.get("/getJournals", function(req, res) {
                               });
                 res.end(JSON.stringify(providers));
             };
-            
-            locker.providers("journal", 
+
+            locker.providers("journal",
                              function(err, providers) {
                                  console.log(err, providers);
                                  console.log("looking");
@@ -101,7 +100,7 @@ app.get("/getJournals", function(req, res) {
                                      callback([]);
                                      return;
                                  }
-                                 
+
                                  if (providers.length == 1) {
                                      // only one journal, use it
                                      journal = providers[0].id;
@@ -110,7 +109,7 @@ app.get("/getJournals", function(req, res) {
                                      callback(providers);
                                      return;
                                  }
-                                 
+
                                  if (providers.length > 1) {
                                      // have the user pick a journal
                                      console.log("multiple journals");
@@ -118,7 +117,7 @@ app.get("/getJournals", function(req, res) {
                                      callback(providers);
                                      return;
                                  }
-                                 
+
                                  console.log("giving up");
                                  callback([]);
                                  return;

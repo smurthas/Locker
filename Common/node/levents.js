@@ -9,11 +9,10 @@
 
 var http = require("http");
 var url = require("url");
-require.paths.push(__dirname);
-var lconfig = require("lconfig");
-var serviceManager = require("lservicemanager");
+var lconfig = require(__dirname + "/lconfig");
+var serviceManager = require(__dirname + "/lservicemanager");
 var logger = require("./logger.js").logger;
-var syncManager = require('lsyncmanager');
+var syncManager = require(__dirname + '/lsyncmanager');
 
 var eventListeners = {};
 var processingEvents = {}; // just a map of arrays of the service events that are currently being processed

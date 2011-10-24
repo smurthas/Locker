@@ -7,7 +7,7 @@
 *
 */
 
-var lfs = require("lfs");
+var lfs = require(__dirname + "/lfs");
 var fs = require("fs");
 
 // global thread to keep track of state counters, and keep cached to disk
@@ -54,7 +54,7 @@ exports.init = function()
 
 function stateChange(field)
 {
-    stateIt[field+"Last"] = stateIt["updated"] = stateUpdated = new Date().getTime();    
+    stateIt[field+"Last"] = stateIt["updated"] = stateUpdated = new Date().getTime();
 }
 
 function stateSync()

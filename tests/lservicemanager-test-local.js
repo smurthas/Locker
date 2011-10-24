@@ -18,11 +18,10 @@ var util = require("util");
 var events = require("events");
 var request = require("request");
 var testUtils = require(__dirname + "/test-utils.js");
-require.paths.push(__dirname + "/../Common/node");
-var serviceManager = require("lservicemanager.js");
-var lconfig = require("lconfig");
+var serviceManager = require(__dirname + "/../Common/node/lservicemanager.js");
+var lconfig = require(__dirname + "/../Common/node/lconfig");
 lconfig.load("Config/config.json");
-var levents = require('levents');
+var levents = require(__dirname + "/../Common/node/levents");
 var path = require('path');
 
 var lmongo = require('../Common/node/lmongo.js');

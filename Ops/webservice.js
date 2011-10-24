@@ -10,26 +10,25 @@
 var url = require("url");
 var http = require('http');
 var request = require('request');
-var lscheduler = require("lscheduler");
-var levents = require("levents");
-var lutil = require('lutil');
-var serviceManager = require("lservicemanager");
-var syncManager = require('lsyncmanager');
+var lscheduler = require(__dirname + "/../Common/node/lscheduler");
+var levents = require(__dirname + "/../Common/node/levents");
+var lutil = require(__dirname + "/../Common/node/lutil");
+var serviceManager = require(__dirname + "/../Common/node/lservicemanager");
+var syncManager = require(__dirname + "/../Common/node/lsyncmanager");
 // var dashboard = require(__dirname + "/dashboard.js");
 var express = require('express');
 var connect = require('connect');
 var request = require('request');
-var sys = require('sys');
 var path = require('path');
 var fs = require("fs");
 var url = require('url');
 var querystring = require("querystring");
 var lfs = require(__dirname + "/../Common/node/lfs.js");
 var httpProxy = require('http-proxy');
-var lpquery = require("lpquery");
-var lconfig = require("lconfig");
+var lpquery = require(__dirname + "/../Common/node/lpquery");
+var lconfig = require(__dirname + "/../Common/node/lconfig");
 
-var lcrypto = require("lcrypto");
+var lcrypto = require(__dirname + "/../Common/node/lcrypto");
 
 var proxy = new httpProxy.RoutingProxy();
 var scheduler = lscheduler.masterScheduler;
@@ -338,7 +337,7 @@ function proxyRequest(method, req, res) {
         { // extra sanity check
             return res.send(404);
         }
-        
+
         fs.stat(path.join(info.srcdir, "static", fileUrl.pathname), function(err, stats) {
             if (!err && (stats.isFile() || stats.isDirectory())) {
                 res.sendfile(path.join(info.srcdir, "static", fileUrl.pathname));

@@ -9,11 +9,11 @@
 
 var fs = require("fs");
 var path = require("path");
-var lconfig = require("lconfig");
+var lconfig = require(__dirname + "/lconfig");
 var crypto = require("crypto");
 var util = require("util");
 var spawn = require('child_process').spawn;
-var levents = require('levents');
+var levents = require(__dirname + '/levents');
 var wrench = require('wrench');
 var lutil = require(__dirname + "/lutil");
 

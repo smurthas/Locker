@@ -9,7 +9,7 @@
 
 var vows = require("vows");
 var assert = require("assert");
-var lconfig = require("lconfig");
+var lconfig = require(__dirname + "/../Common/node/lconfig");
 lconfig.load("Config/config.json");
 var RESTeasy = require('api-easy');
 var socketIO = require("socket.io-client");

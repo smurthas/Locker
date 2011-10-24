@@ -8,7 +8,6 @@
 */
 
 var fs = require('fs'),
-    sys = require('sys'),
     url = require('url'),
     https = require('https'),
     http = require('http'),
@@ -106,9 +105,9 @@ exports.saveUrl = function(requestURL, filename, callback) {
     var port = (url.parse(requestURL).protocol == 'http:') ? 80 : 443;
     var host = url.parse(requestURL).hostname;
     var client;
-    if(port == 80) 
+    if(port == 80)
         client = http;
-    else 
+    else
         client = https;
     var parsedUrl = url.parse(requestURL, true);
 
@@ -130,7 +129,7 @@ exports.saveUrl = function(requestURL, filename, callback) {
 function listSubdirectories(path) {
     var files = fs.readdirSync(path);
     var dirs = [];
-    for(var i in files) {    
+    for(var i in files) {
         var fullPath = path + '/' + files[i];
         var stats = fs.statSync(fullPath);
         if(!stats.isDirectory())

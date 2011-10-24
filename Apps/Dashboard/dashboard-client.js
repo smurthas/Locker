@@ -14,12 +14,11 @@
 var fs = require('fs'),
     path = require('path'),
     url = require('url'),
-    sys = require('sys'),
     express = require('express'),
     connect = require('connect'),
     http = require('http'),
     request = require('request');
-    
+
 
 var map;
 
@@ -37,7 +36,7 @@ module.exports = function(passedLockerHost, passedLockerPort, passedPort, passed
     externalBase = passedExternalBase;
     lockerBase = 'http://' + rootHost + ':' + lockerPort + '/core/dashboard';
     lockerRoot = 'http://'+rootHost+':'+lockerPort;
-    
+
     app.use(express.static(__dirname + '/static'));
 
     app.listen(rootPort);
@@ -54,11 +53,11 @@ app.get('/', function (req, res) {
         synclets = JSON.parse(body);
         var connectorCount = 0; // should replace with collection count
         var path = __dirname + "/static/wizard/index.html";
-                   
+
         for (app in synclets.installed) {
             path = __dirname + "/dashboard.html";
         }
-        
+
         console.error('DEBUG: path', path);
         fs.readFile(path, function(err, data) {
             res.write(data, "binary");

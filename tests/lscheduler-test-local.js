@@ -10,14 +10,13 @@ var assert = require("assert");
 var request = require("request");
 var vows = require("vows");
 var testUtils = require(__dirname + "/test-utils.js");
-require.paths.push(__dirname + "/../Common/node");
 var fs = require('fs');
-var lconfig = require('lconfig');
+var lconfig = require(__dirname + '/../Common/node/lconfig');
 lconfig.load('Config/config.json');
-var locker = require('locker');
+var locker = require(__dirname + '/../Common/node/locker');
 var events = require('events');
-var serviceManager = require('lservicemanager');
-var lscheduler = require("lscheduler.js");
+var serviceManager = require(__dirname + '/../Common/node/lservicemanager');
+var lscheduler = require(__dirname + '/../Common/node/lscheduler.js');
 
 serviceManager.scanDirectory("Tests");
 serviceManager.findInstalled();

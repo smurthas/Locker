@@ -8,12 +8,11 @@
 */
 
 // merge contacts from connectors
-require.paths.push(__dirname + "/../../Common/node");
-var lconfig = require('lconfig');
+var lconfig = require(__dirname + '/../../Common/node/lconfig');
 lconfig.load('../../Config/config.json');
 
 var fs = require('fs'),
-    locker = require('locker.js');
+    locker = require(__dirname + '/../../Common/node/locker.js');
 
 var sync = require('./sync');
 var dataStore = require("./dataStore");

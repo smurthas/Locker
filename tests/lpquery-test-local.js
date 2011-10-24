@@ -9,8 +9,7 @@
 
 var vows = require("vows");
 var assert = require("assert");
-require.paths.push(__dirname + "/../Common/node");
-var lpquery = require("lpquery");
+var lpquery = require(__dirname + '/Common/node/lpquery');
 
 vows.describe("Query System").addBatch({
     "Parsing a basic query" : {

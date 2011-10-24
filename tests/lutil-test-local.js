@@ -9,9 +9,8 @@
 var assert = require("assert");
 var vows = require("vows");
 var testUtils = require(__dirname + "/test-utils.js");
-require.paths.push(__dirname + "/../Common/node");
 var fs = require('fs');
-var lutil = require('lutil');
+var lutil = require(__dirname + '/Common/node/lutil');
 
 
 var filename = 'tmp_' + Math.random() + '.json';

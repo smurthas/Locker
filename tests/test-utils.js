@@ -12,7 +12,13 @@ var assert = require("assert");
 var events = require("events");
 var fs = require('fs');
 var request = require('request');
+var EventEmitter = require('events').EventEmitter;
+exports.eventEmitter = new EventEmitter();
 
+var lservicemanager = require(__dirname + '/Common/node/lservicemanager');
+var locker = require(__dirname + '/Common/node/locker');
+var levents = require(__dirname + '/Common/node/levents');
+var oldFuncs = {};
 
 exports.timeoutAsyncCallback = function(timeout, startCallback, runCallback) {
     var context = {
@@ -72,7 +78,7 @@ exports.waitForPathsToExist = function(paths, retries, timeout,  callback) {
         var files = [];
         for(var i in paths)
             files.push(paths[i]);
-        
+
         exports.checkFiles(files, function(err) {
             if(err) {
                 exports.waitForPathsToExist(paths, retries - 1, timeout,  callback);
@@ -115,23 +121,14 @@ exports.waitForEvents = function (url, retries, timeout, expectedResponses, valu
     setTimeout(function() {
         request.get({uri: url}, function(err, resp, data) {
             retries--;
-            exports.waitForEvents(url, retries, timeout, expectedResponses, JSON.parse(data), callback); 
+            exports.waitForEvents(url, retries, timeout, expectedResponses, JSON.parse(data), callback);
         });
     }, timeout);
 }
 
-require.paths.push(__dirname + "/../Common/node");
-var EventEmitter = require('events').EventEmitter;
-exports.eventEmitter = new EventEmitter();
-
-var lservicemanager = require('lservicemanager');
-var locker = require('locker');
-var levents = require('levents');
-var oldFuncs = {};
-
 // types is an array of the event types to listen for
 exports.hijackEvents = function (types, svcId) {
-    
+
     lservicemanager.isRunning = function() { return true; };
     lservicemanager.isInstalled = function() { return true; };
     lservicemanager.metaInfo = function() { return { uriLocal: 'http://testing:80/' }; };
@@ -140,7 +137,7 @@ exports.hijackEvents = function (types, svcId) {
             exports.eventEmitter.emit('event', body, callback);
         }
     }
-    
+
     for (var i = 0; i < types.length; i++) {
         levents.addListener(types[i], svcId, '/faked');
     }

@@ -7,14 +7,13 @@
 *
 */
 
-require.paths.push(__dirname + "/../Common/node");
 var assert = require('assert');
 var vows = require('vows');
 var events = require('events');
 var RESTeasy = require('api-easy');
 var suite = RESTeasy.describe('Locker Search');
-var lconfig = require('lconfig');
-var lsearch = require('lsearch');
+var lconfig = require(__dirname + '/Common/node/lconfig');
+var lsearch = require(__dirname + '/Common/node/lsearch');
 lconfig.load('Config/config.json');
 
 lsearch.setEngine(lsearch.engines.CLucene);
@@ -67,7 +66,7 @@ suite.next().suite.addBatch({
 }).addBatch({
     "Can add doc 1 of a type":{
         topic:function() {
-            lsearch.indexType("test", {"randomId":1, "test":"testing the indexing of a document1"}, this.callback);         
+            lsearch.indexType("test", {"randomId":1, "test":"testing the indexing of a document1"}, this.callback);
         },
         "successfully":function(err, indexTime) {
             assert.isNull(err);
@@ -76,7 +75,7 @@ suite.next().suite.addBatch({
     },
     "Can add doc 2 of a type":{
         topic:function() {
-            lsearch.indexType("test", {"randomId":2, "test":"testing the indexing of a document2"}, this.callback);         
+            lsearch.indexType("test", {"randomId":2, "test":"testing the indexing of a document2"}, this.callback);
         },
         "successfully":function(err, indexTime) {
             assert.isNull(err);
@@ -85,7 +84,7 @@ suite.next().suite.addBatch({
     },
     "Can add doc 3 of a type":{
         topic:function() {
-            lsearch.indexType("test", {"randomId":3, "test":"testing the indexing of a document3"}, this.callback);         
+            lsearch.indexType("test", {"randomId":3, "test":"testing the indexing of a document3"}, this.callback);
         },
         "successfully":function(err, indexTime) {
             assert.isNull(err);

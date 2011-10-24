@@ -1,9 +1,8 @@
 var repl = require('repl');
-require.paths.push('./Common/node');
-var lconfig = require('lconfig');
+var lconfig = require(__dirname + '/Common/node/lconfig');
 lconfig.load('Config/config.json');
 
-var lsearch = require('lsearch');
+var lsearch = require(__dirname + '/Common/node/lsearch');
 lsearch.setIndexPath('./Me/search/search.index');
 lsearch.setEngine(lsearch.engines.CLucene);
 
@@ -19,14 +18,14 @@ ctx.indexType = function(type, object) {
             return;
         }
         console.log('Indexed document in ' + time);
-    });  
+    });
 };
 ctx.queryType = function(type, query) {
     lsearch.queryType(type, query, {}, function(err, results) {
        if (err) {
            console.log('Error: ' + err);
            return;
-       } 
+       }
        console.log('Found ' + results.length + ' results:');
        for (var i in results) {
            console.log(results[i]);
@@ -42,7 +41,7 @@ ctx.queryAll = function(query) {
        if (err) {
            console.log('Error: ' + err);
            return;
-       } 
+       }
        console.log('Found ' + results.length + ' results:');
        for (var i in results) {
            console.log(results[i]);

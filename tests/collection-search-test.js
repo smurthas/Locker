@@ -1,11 +1,11 @@
-var lconfig = require('lconfig');
+var lconfig = require('../Common/node/lconfig');
 lconfig.load('Config/config.json');
-var locker = require('locker');
+var locker = require('../Common/node/locker');
 var assert = require('assert');
 var RESTeasy = require('api-easy');
 var suite = RESTeasy.describe('Search Collection');
 var fakeweb = require('node-fakeweb');
-var lsearch = require('lsearch');
+var lsearch = require('../Common/node/lsearch');
 var search = require('../Collections/Search/search');
 var fs = require('fs');
 

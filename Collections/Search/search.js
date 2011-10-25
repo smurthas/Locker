@@ -12,7 +12,7 @@ var fs = require('fs'),
 
 var lsearch = require('../../Common/node/lsearch');
 var lutil = require('../../Common/node/lutil');
-var lconfig = require('lconfig');
+var lconfig = require('../../Common/node/lconfig');
 lconfig.load('Config/config.json');
 
 var lockerInfo = {};

@@ -7,7 +7,7 @@ var fakeweb = require('node-fakeweb');
 var mongoCollections;
 var svcId = 'contacts';
 
-var lconfig = require('lconfig');
+var lconfig = require('../Common/node/lconfig');
 lconfig.load('Config/config.json');
 
 var request = require('request');

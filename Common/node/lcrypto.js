@@ -10,7 +10,7 @@ var crypto = require("crypto");
 var path = require("path");
 var spawn = require("child_process").spawn;
 var fs = require("fs");
-var lconfig = require('lconfig');
+var lconfig = require('../../Common/node/lconfig');
 
 var idKey,idKeyPub,symKey;
 

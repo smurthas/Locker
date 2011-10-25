@@ -1,5 +1,4 @@
-var syncManager = require('lsyncmanager')
-  , lconfig = require('lconfig')
+var syncManager = require('../Common/node/lsyncmanager')
   , fs = require('fs')
   , locker = require('../Common/node/locker')
   , request = require('request')

@@ -9,7 +9,7 @@
 var assert = require("assert");
 var fs = require('fs');
 var path = require('path');
-var lconfig = require('lconfig');
+var lconfig = require('../../Common/node/lconfig');
 var wrench = require('wrench');
 var is = require("lutil").is;
 var util = require('util');
@@ -114,20 +114,20 @@ CLEngine = function()
       TERMVECTOR_YES: 512,
       TERMVECTOR_WITH_POSITIONS: 512 | 1024,
       TERMVECTOR_WITH_OFFSETS: 512 | 2048,
-      TERMVECTOR_WITH_POSITIONS_OFFSETS: (512 | 1024) | (512 | 2048) 
+      TERMVECTOR_WITH_POSITIONS_OFFSETS: (512 | 1024) | (512 | 2048)
     };
-    
+
     return this;
 };
 
 CLEngine.prototype.indexType = function(type, source, value, callback) {
     var doc = new this.cl.Document();
-    
+
     if (!this.mappings.hasOwnProperty(type)) {
         callback("No valid mapping for the type: " + type);
         return;
     }
-    
+
     idToStore = value[this.mappings[type]["_id"]];
     if (!idToStore) {
         callback("No valid id property was found");
@@ -162,14 +162,14 @@ CLEngine.prototype.indexType = function(type, source, value, callback) {
 
     };
     processValue(value, this.mappings[type]);
-    
+
     if (contentTokens.length == 0) {
         console.log("No valid tokens were found to index id " + idToStore);
         return callback(null, 0, 0);
     }
 
     var contentString = contentTokens.join(" <> ");
-    
+
     //console.log("Going to store " + contentString);
     doc.addField("_type", type, this.engine.Store.STORE_YES|this.engine.Index.INDEX_UNTOKENIZED);
     if (source !== null) {
@@ -228,7 +228,7 @@ exports.setIndexPath = function(newPath) {
     if (!path.existsSync(indexPath)) {
       fs.mkdirSync(indexPath, 0755);
     };
-    
+
 };
 
 function exportEngineFunction(funcName) {
@@ -257,7 +257,7 @@ exports.indexTypeAndSource = function(type, source, value, cb) {
 };
 
 exports.deleteDocument = function(id, cb) {
-  exports.currentEngine.deleteDocument(id, cb);  
+  exports.currentEngine.deleteDocument(id, cb);
 };
 
 exports.deleteDocumentsByType = function(type, cb) {

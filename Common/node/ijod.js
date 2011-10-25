@@ -13,7 +13,7 @@
 */
 
 var fs = require('fs'),
-    lconfig = require('lconfig'),
+    lconfig = require('../../Common/node/lconfig'),
     path = require('path'),
     lfs = require(__dirname + '/lfs');
 

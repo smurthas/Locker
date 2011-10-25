@@ -12,7 +12,7 @@ var request = require('request'),
     lcrypto = require("lcrypto"),
     fs = require('fs');
 
-var lconfig = require('lconfig');
+var lconfig = require('../../Common/node/lconfig');
 //TODO: fix lconfig and remove this!
 lconfig.load('../../Config/config.json');
 
@@ -25,7 +25,7 @@ exports.auth = {};
 
 exports.authAndRun = function(app, externalUrl, onCompletedCallback) {
     uri = externalUrl;
-    
+
     if(exports.isAuthed()) {
         onCompletedCallback();
         return;
@@ -40,16 +40,16 @@ exports.isAuthed = function() {
         if(!exports.auth) {
             exports.auth = {};
         }
-        
+
         if((exports.auth.username && exports.auth.password && exports.auth.host && exports.auth.port)) {
             return true;
         }
-    
+
         var authData = JSON.parse(fs.readFileSync('auth.json', 'utf8'));
         console.error('DEBUG: authData', authData);
-        if(authData.hasOwnProperty('username') && 
-           authData.hasOwnProperty('password') && 
-           authData.hasOwnProperty('host') && 
+        if(authData.hasOwnProperty('username') &&
+           authData.hasOwnProperty('password') &&
+           authData.hasOwnProperty('host') &&
            authData.hasOwnProperty('port')) {
             authData.username = lcrypto.decrypt(authData.username);
             authData.password = lcrypto.decrypt(authData.password);
@@ -66,8 +66,8 @@ exports.isAuthed = function() {
 function go(req, res) {
     if(!(exports.auth.username && exports.auth.password && exports.auth.host && exports.auth.port)) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end("<html>Enter your IMAP server info that will be used to sync your data" + 
-                "<form method='post' action='saveAuth'>" + 
+        res.end("<html>Enter your IMAP server info that will be used to sync your data" +
+                "<form method='post' action='saveAuth'>" +
                     "Username: <input name='username'><br>" +
                     "Password: <input type='password' name='password'><br>" +
                     "Host: <input name='host' value='imap.gmail.com'><br>" +

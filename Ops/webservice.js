@@ -85,6 +85,9 @@ locker.get("/providers", function(req, res) {
     var services = serviceManager.providers(req.param('types').split(','));
     var synclets = syncManager.providers(req.param('types').split(','));
     lutil.addAll(services, synclets);
+    for (var i = 0; i < services.length; i++) {
+        delete services[i].auth;
+    }
     res.end(JSON.stringify(services));
 });
 

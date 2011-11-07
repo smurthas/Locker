@@ -11,7 +11,7 @@ var searchSelector = '.search-header-row:not(.template),.search-result-row:not(.
 if ( ! window.location.origin) window.location.origin = window.location.protocol+"//"+window.location.host;
 var externalBase = window.location.origin;
 
-var _gaq = [['_setAccount', 'UA-22812443-1'], ['_trackPageview']];;
+var _kmq = _kmq || [];
 
 $(document).ready(
     function() {
@@ -109,6 +109,7 @@ $(document).ready(
 
         $('.search').keyup(function(e) {
             if (e.keyCode == 13) {
+                if ($('.highlighted').length === 0) return true;
                 $('.highlighted').click();
                 $('#search-results').fadeOut();
                 return false;
@@ -402,7 +403,8 @@ function drawServices() {
             $('.service:not(.template)').remove();
             providers = [];
             var syncletsToRender = [];
-            for (var i in data.uses) {
+            for (var i = data.uses.length - 1; i >= 0; i--) {
+            // for (var i in data.uses) {
                 for (var j = 0; j < synclets.available.length; j++) {
                     if (synclets.available[j].provider === data.uses[i]) {
                         if(synclets.available[j].authurl) {
@@ -473,11 +475,7 @@ function drawViewer(viewer, isSelected, appType) {
                 log("forced background syncing to github");
                 $.get('/synclets/github/run?id=repos', function(){});
                 showGritter('syncgithub');
-                try {
-                     _gaq.push(['_trackPageview', '/track/syncviewers']);
-                } catch(err) {
-                    console.error(err);
-                }
+                _kmq.push(['record', 'synced viewers']);
                 return;
             }
             if (viewer.handle === 'devdocs') {
@@ -512,12 +510,7 @@ function drawViewers() {
             for(var i in viewersToRender) {
                 drawViewer(viewersToRender[i], data.selected[app] === viewersToRender[i].handle, apps[j]);
                 if (viewersToRender[i].author !== 'Singly') {
-                   try {
-                       _gaq.push(['_trackPageview', '/track/installedviewers']);
-                   } catch(err) {
-                       console.error(err);
-                   }
-
+                    _kmq.push(['record', 'installed viewer']);
                 }
             }
         }
@@ -551,6 +544,7 @@ function accountPopup (elem) {
                  twitter: {width: 630, height: 500},
                  tumblr: {width: 630, height: 500},
                  facebook: {width: 980, height: 705},
+                 instagram: {width: 800, height: 500},
                  flickr: {width: 1000, height: 877}
                 };
     if (oauthPopupSizes[elem.data('provider')]) {

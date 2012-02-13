@@ -132,8 +132,8 @@ exports.app = function(app)
 
     app.get('/registry/myApps', exports.getMyApps);
 
-    app.get('/auth/:id', authIsAwesome);
-    app.get('/auth/:id/auth', authIsAuth);
+    app.all('/auth/:id', authIsAwesome);
+    app.all('/auth/:id/auth', authIsAuth);
 
     app.get('/deauth/:id', deauthIsAwesomer);
 }
@@ -533,19 +533,22 @@ function adduser (username, password, email, cb) {
 // given a connector package in the registry, install it, and get the auth url for it to return
 function authIsAwesome(req, res) {
     var id = req.params.id;
-    if(!verify(regIndex[id]))
-    {
-        logger.error("package verification failed trying to auth "+id);
-        return res.send(id+" failed verification :(", 500);
-    }
-    exports.install(id, function(err){
-        if(err) return res.send(err, 500);
+    console.error("DEBUG: id", id);
+    console.error("DEBUG: regIndex[id]", regIndex[id]);
+    // if(!verify(regIndex[id]))
+    // {
+    //     logger.error("package verification failed trying to auth "+id);
+    //     return res.send(id+" failed verification :(", 500);
+    // }
+    // exports.install(id, function(err){
+        // if(err) return res.send(err, 500);
         var js = serviceManager.map(id);
         if(!js) return res.send("failed to install :(", 500);
         try {
             var authModule = require(path.join(lconfig.lockerDir, js.srcdir, 'auth.js'));
         }catch(E){
-            return res.send(E, 500);
+            console.error("DEBUG: E", E);
+            return res.send(JSON.stringify(E), 500);
         }
         // oauth2 types redirect
         if(authModule.authUrl) {
@@ -554,7 +557,7 @@ function authIsAwesome(req, res) {
         }
         // everything else is pass-through (custom, oauth1, etc)
         authIsAuth(req, res);
-    });
+    // });
 }
 
 // handle actual auth api requests or callbacks, much conflation to keep /auth/foo/auth consistent everywhere!

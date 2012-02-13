@@ -1,0 +1,7 @@
+{
+    "provides":["ride/strava", "segment/strava"],
+    "profileIds" : ["athelete_id"],
+    "synclets":[
+        {"name": "self", "frequency": 7200}
+    ]
+}

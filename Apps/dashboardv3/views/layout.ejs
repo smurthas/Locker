@@ -28,7 +28,7 @@
              class="explore <% if (page === 'explore' || page === 'you-connect') { %>blue<% } %>">
             Explore
           </a>
-          <a data-id='AppGallery' href='appGallery'
+          <a data-id='AppGallery' href='appGallery#AppGallery-Featured'
              class="gallery <% if (page === 'appGallery') { %>blue<% } %>">
              App Gallery
           </a>
@@ -52,27 +52,15 @@
       <%- body %>
     </aside>
     <div class="app-container" id="iframeContainer">
-      <div id="appHeader"></div>
+      <div class="app-header"></div>
       <iframe id="appFrame"></iframe>
     </div>
     <div class="app-container" id="appDiv">
       <section id="AppGallery">
-        <section id="Featured">
-        </section>
-        <section id="Author">
-        </section>
-        <section id="Filter">
-        </section>
-        <section id="Details">
-        </section>
-      </section>
-      <section id="Settings">
-        <section id="Connections">
-        </section>
-        <section id="AccountInformation">
-        </section>
-        <section id="APIKey">
-        </section>
+        <section id="Featured"></section>
+        <section id="Author"></section>
+        <section id="Filter"></section>
+        <section id="Details"></section>
       </section>
     </div>
 

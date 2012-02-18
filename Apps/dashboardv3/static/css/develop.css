@@ -20,39 +20,41 @@ h3 {
   font-weight:bold;
 }
 
-#develop-nav {
+.develop-nav {
   width: 100%;
   background: #F2F2F2;
-  height: 160px;
 }
-
-.develop-nav-column {
-	width: 200px;
-	height: 160px;
+.develop-nav ul {
+	width: 250px;
 	float: left;
 }
-
-.develop-nav-column div {
-	margin: 25px;
+.develop-nav li {
+  margin: 25px;
+}
+.develop-nav .selected {
+  color: #29ABE2;
+  font-weight: bold;
 }
 
-.navitem-selected {
-  font-weight: bold;
-  color: #29ABE2 !important;
+.description {
+  width: 600px;
+  margin: 20px 0 30px 0;
+  font-size: 20px;
+  color: #666;
 }
 
 #apiexplorer-form {
   margin: 30px 0 0 0;
 }
 
-li {
-  margin-left: 30px;
-}
-
 li p {
   font-size: 16px;
   margin: 0;
   max-width: 640px;
+}
+
+li li {
+  margin-left: 30px;
 }
 
 pre.prettyprint {
@@ -88,4 +90,15 @@ pre.prettyprint {
 }
 #templatesicons-content a {
   color: #F7931E;
+}
+
+.github-step .connect {
+  margin-top: 10px;
+  padding: 10px 0 10px 40px;
+  background: transparent url('/dashboard/img/icons/32px/github.png') no-repeat left center;
+}
+.github-step .synclet-name {
+  display: inline-block;
+  position: relative;
+  margin-right: 10px;
 }

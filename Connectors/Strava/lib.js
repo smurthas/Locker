@@ -1,14 +1,12 @@
-var strava = require('strava');
+var strava = require('strava-js');
 
 var auth;
 
 exports.init = function(_auth) {
-    auth = _auth;
+  strava.init(_auth);
+  auth = _auth;
 }
 
-exports.getRider = function(id, callback) {
-    if(!callback && typeof id === 'function') {
-        callback = id;
-        id = auth.athelete_id;
-    }
+exports.getRides = function(params, callback) {
+  strava.getRides(params, callback);
 }

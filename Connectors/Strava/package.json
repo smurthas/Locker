@@ -22,7 +22,7 @@
     "node": ">=0.4.9"
   },
   "dependencies": {
-    "strava-js": "=0.0.0"
+    "strava-js": "=0.0.1"
   },
   "devDependencies": {}
 }

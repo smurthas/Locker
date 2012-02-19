@@ -7,6 +7,4 @@ exports.init = function(_auth) {
   auth = _auth;
 }
 
-exports.getRides = function(params, callback) {
-  strava.getRides(params, callback);
-}
+exports.getRidesWithDetails = strava.getRidesWithDetails;

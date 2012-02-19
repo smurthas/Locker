@@ -26,8 +26,8 @@ exports.sync = function(processInfo, callback) {
 };
 
 function getRides(config, callback) {
-  strava.getRides({offset: config.offset, startId: config.startId}, function(err, rides, resp) {
-    if (err || resp.statusCode !== 200) return callback(err, rides);
+  strava.getRidesWithDetails({offset: config.offset, startId: config.startId}, function(errs, rides) {
+    if (errs) return callback(errs, rides);
     // none returned, all done for now
     if (!rides || rides.length === 0) {
       config.startId = config.newest;
